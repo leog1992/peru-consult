@@ -1,7 +1,7 @@
 const qs = require('qs');
 const cheerio = require('cheerio');
 const config = require('../../config/env');
-const cycleTlsClient = require('../cycleTlsClient');
+const gotScrapingClient = require('../gotScrapingClient');
 const { normalizeSunatData } = require('./sunat.normalizer');
 
 class SunatScraper {
@@ -31,7 +31,7 @@ class SunatScraper {
         'codigo': ''
       });
 
-      const response = await cycleTlsClient.post(this.baseUrl, {
+      const response = await gotScrapingClient.post(this.baseUrl, {
         body: payload,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

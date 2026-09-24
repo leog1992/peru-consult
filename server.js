@@ -19,11 +19,11 @@ const server = app.listen(portOrPassenger, () => {
   console.log(`===============================================`);
 });
 
-const cycleTlsClient = require('./src/scrapers/cycleTlsClient');
+const gotScrapingClient = require('./src/scrapers/gotScrapingClient');
 
 const gracefulShutdown = async (signal) => {
-  console.log(`\nRecibida señal ${signal}, cerrando servidor y subprocesos...`);
-  await cycleTlsClient.close();
+  console.log(`\nRecibida señal ${signal}, cerrando servidor...`);
+  await gotScrapingClient.close();
   server.close(() => {
     console.log('Servidor cerrado.');
     process.exit(0);
