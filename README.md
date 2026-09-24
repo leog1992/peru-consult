@@ -11,7 +11,7 @@ API REST desacoplada para la consulta de información de **RUC** (SUNAT) y **DNI
   - **Controllers:** Manejo de peticiones HTTP y respuestas estandarizadas.
   - **Services:** Lógica de negocio y orquestación con **Cache-Aside** (TTL configurable).
   - **Providers / Fallback Strategy (Patrón Estrategia):**
-    - **Consulta RUC:** Scraping a SUNAT mediante **CycleTLS** para eludir la huella TLS de Cloudflare y decodificación `ISO-8859-1` (`iconv-lite`) con Cheerio.
+    - **Consulta RUC:** Scraping a SUNAT mediante **got-scraping** para emulación nativa de huellas TLS (JA3/JA4), HTTP/2 y elusión de WAF/Cloudflare, con decodificación `ISO-8859-1` (`iconv-lite`) y Cheerio.
     - **Consulta DNI:** Estrategia con cascada automática de respaldo (*failover*):
       1. **SUNAT DNI** (Endpoint directo para personas mayores y menores de edad - tiempo de respuesta < 300ms).
       2. **Qontar** (Respaldo que además provee dirección fiscal y ubigeo).
@@ -38,7 +38,7 @@ peru-consult/
 │   │   ├── index.js                 # Router principal con /health
 │   │   └── ruc.routes.js            # GET /api/v1/ruc/:ruc
 │   ├── scrapers/
-│   │   ├── cycleTlsClient.js        # Singleton CycleTLS para bypass de Cloudflare
+│   │   ├── gotScrapingClient.js     # Cliente nativo got-scraping para bypass de Cloudflare/WAF
 │   │   ├── dni/
 │   │   │   ├── providers/
 │   │   │   │   ├── elDni.provider.js    # Proveedor eldni.com
@@ -78,6 +78,17 @@ npm run dev
 # 3. Iniciar en producción
 npm start
 ```
+
+### Despliegue en cPanel / CloudLinux (Phusion Passenger)
+
+1. En cPanel, ingresa a **Setup Node.js App**.
+2. Configura los parámetros de la aplicación:
+   - **Application root:** Directorio donde subiste los archivos (ej. `peru-consult` o `apis/peru-consult`).
+   - **Application startup file:** `server.js` *(importante: no dejar en `app.js`)*.
+3. Haz clic en **Run NPM Install** para instalar las dependencias en el entorno virtual.
+4. Asegúrate de configurar las variables del archivo `.env`.
+5. Haz clic en **Restart** para iniciar el servicio.
+
 
 ---
 
