@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 module.exports = {
-  port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
   cacheTtl: parseInt(process.env.CACHE_TTL_SECONDS || '3600', 10),
   sunatToken: process.env.SUNAT_TOKEN,

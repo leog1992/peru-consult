@@ -1,15 +1,21 @@
+if (typeof (PhusionPassenger) !== 'undefined') {
+  PhusionPassenger.configure({ autoInstall: false });
+}
+
 const app = require('./src/app');
 const config = require('./src/config/env');
 
-const PORT = config.port;
+const portOrPassenger = (typeof (PhusionPassenger) !== 'undefined')
+  ? 'passenger'
+  : (process.env.PORT || 3000);
 
-const server = app.listen(PORT, () => {
+const server = app.listen(portOrPassenger, () => {
   console.log(`===============================================`);
-  console.log(`🚀 Perú Consult API corriendo en puerto ${PORT}`);
+  console.log(`🚀 Perú Consult API corriendo en: ${portOrPassenger}`);
   console.log(`📡 Entorno: ${config.nodeEnv}`);
-  console.log(`🔗 Healthcheck: http://localhost:${PORT}/api/v1/health`);
-  console.log(`🔍 RUC endpoint: http://localhost:${PORT}/api/v1/ruc/:ruc`);
-  console.log(`🔍 DNI endpoint: http://localhost:${PORT}/api/v1/dni/:dni`);
+  console.log(`🔗 Healthcheck: /api/v1/health`);
+  console.log(`🔍 RUC endpoint: /api/v1/ruc/:ruc`);
+  console.log(`🔍 DNI endpoint: /api/v1/dni/:dni`);
   console.log(`===============================================`);
 });
 

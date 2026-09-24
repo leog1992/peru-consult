@@ -11,8 +11,21 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Prefijo de rutas API
-app.use('/api/v1', apiRoutes);
+// Ruta raíz de bienvenida
+app.get(['/', '/peruconsult'], (req, res) => {
+  res.json({
+    name: 'Perú Consult API',
+    status: 'online',
+    endpoints: {
+      health: '/api/v1/health',
+      ruc: '/api/v1/ruc/:ruc',
+      dni: '/api/v1/dni/:dni'
+    }
+  });
+});
+
+// Prefijo de rutas API (soporta raíz local y subdirectorio de cPanel)
+app.use(['/api/v1', '/peruconsult/api/v1'], apiRoutes);
 
 // Manejo de rutas inexistentes (404)
 app.use((req, res) => {
